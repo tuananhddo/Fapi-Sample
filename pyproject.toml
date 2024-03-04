@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["Me"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+gino = {extras = ["starlette"], version = "^1.0.1"}
+alembic = "^1.13.1"
+psycopg2 = "^2.9.9"
+fastapi = "^0.110.0"
+uvicorn = "^0.27.1"
+gunicorn = "^21.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.0"
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
