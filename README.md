@@ -17,4 +17,8 @@ poetry add gino[starlette]
 poetry add fastapi uvicorn gunicorn
 poetry add -D pytest requests
 ## Run
-poetry run uvicorn main:app --reload
+poetry run uvicorn src.main:app --reload
+
+#Document
+https://fastapi.tiangolo.com/learn/
+https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save-files-in-chunks
