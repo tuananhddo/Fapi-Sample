@@ -19,7 +19,12 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from ..models.base import Base
+current_file_path = os.path.abspath(__file__)
+# Get the directory containing the current Python script file
+current_directory = os.path.dirname(current_file_path)
+print("Current directory:", current_directory)
+
+from models.base import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -27,15 +32,25 @@ target_metadata = Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 # Load DB
-load_dotenv()
-engine = os.environ.get("DB_ENGINE")
-dbhost = os.environ.get("DB_HOST")
-username = os.environ.get("DB_USERNAME")
-password = os.environ.get("DB_PASSWORD")
-dbname = os.environ.get("DB_NAME")
+# engine = os.environ.get("DB_ENGINE")
+# dbhost = os.environ.get("DB_HOST")
+# username = os.environ.get("DB_USERNAME")
+# password = os.environ.get("DB_PASSWORD")
+# dbname = os.environ.get("DB_NAME")
 
-config.set_main_option("sqlalchemy.url", f"{engine}://{username}:{password}@{dbhost}/{dbname}")
-
+# config.set_main_option("sqlalchemy.url", f"{engine}://{username}:{password}@{dbhost}/{dbname}")
+def get_url():
+    debug = os.getenv("DEBUG", True)
+    print(debug)
+    if debug:
+        load_dotenv()
+    engine = os.getenv("DB_ENGINE", "postgresql+psycopg2")
+    user = os.getenv("DB_USERNAME", "postgres")
+    password = os.getenv("DB_PASSWORD", "1")
+    server = os.getenv("DB_HOST", "db")
+    port = os.getenv("DB_PORT", "5432")
+    db = os.getenv("DB_NAME", "app")
+    return f"{engine}://{user}:{password}@{server}:{port}/{db}"
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -49,7 +64,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -68,8 +84,15 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section, {}),
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
+    configuration = config.get_section(config.config_ini_section)
+    configuration["sqlalchemy.url"] = get_url()
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )

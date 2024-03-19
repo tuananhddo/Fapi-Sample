@@ -1,0 +1,44 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // {
+        //     "name": "Python Debugger: FastAPI",
+        //     "type": "debugpy",
+        //     "request": "launch",
+        //     "module": "uvicorn",
+        //     "args": [
+        //         "main:app",
+        //         "--reload"
+        //     ],
+        //     "jinja": true
+        // },
+        {
+            "name": "Python: Alembic",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "alembic",
+            "args": [
+                "upgrade",
+                "head" // Replace with your specific migration name if needed
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true, // Optional: Focus on your project's code
+            "cwd": "${workspaceFolder}/src"
+        },
+        {
+            "name": "Python: FastAPI",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "src.main:app",
+                "--reload"
+            ],
+            "cwd": "${workspaceFolder}"
+
+        }
+    ]
+}
