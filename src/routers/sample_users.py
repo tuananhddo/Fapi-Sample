@@ -4,7 +4,7 @@ from src import crud
 from src.database import SessionLocal
 from sqlalchemy.orm import Session
 
-router = APIRouter()
+router = APIRouter(prefix="/sample")
 
 
 # @router.get("/users/", tags=["users"])

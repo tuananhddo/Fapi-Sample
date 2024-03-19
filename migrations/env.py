@@ -24,7 +24,7 @@ current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
 print("Current directory:", current_directory)
 
-from models.base import Base
+from src.models.base import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -40,9 +40,8 @@ target_metadata = Base.metadata
 
 # config.set_main_option("sqlalchemy.url", f"{engine}://{username}:{password}@{dbhost}/{dbname}")
 def get_url():
-    debug = os.getenv("DEBUG", True)
-    print(debug)
-    if debug:
+    local_run = os.getenv("RUN_LOCAL", True)
+    if local_run:
         load_dotenv()
     engine = os.getenv("DB_ENGINE", "postgresql+psycopg2")
     user = os.getenv("DB_USERNAME", "postgres")

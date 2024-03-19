@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from .routers.users import router as urouter
+
+from src.settings import settings
+from .routers.sample_users import router as su_router
 # from .routers import users
 
 
@@ -10,8 +12,12 @@ from .routers.users import router as urouter
 app = FastAPI()
 
 # app.include_router(users.router)
-app.include_router(urouter)
+app.include_router(su_router)
 
-@app.get("/")
+@app.get("/ping")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Pong"}
+
+@app.get("/env")
+async def envs():
+    return {"message": settings}
