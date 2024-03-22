@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
-from fastapi.security import APIKeyHeader, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import APIKeyHeader, APIKeyQuery, OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -14,8 +14,10 @@ from src.utils.auth import verify_password
 # openssl rand -hex 32
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-router = APIRouter(prefix="/auth")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+api_key = APIKeyHeader(name="access_token")
+api2_key = APIKeyQuery(name="access_token_q")
+router = APIRouter(prefix="/auth", dependencies=[Depends(api2_key), Depends(api_key)])
 
 
 class TokenData(BaseModel):
@@ -34,10 +36,6 @@ class UserInDB(User):
 
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
-api_key = APIKeyHeader(name="access_token")
-
-app = FastAPI()
 
 
 def get_user(db, username: str):
@@ -96,7 +94,7 @@ def authenticate_user(fake_db, username: str, password: str):
 
 @router.post("/login")
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends(api_key)]
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> Token:
     # user = authenticate_user(fake_users_db, form_data.username, form_data.password)
     # if not user:
