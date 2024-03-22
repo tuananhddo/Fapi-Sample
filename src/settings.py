@@ -8,6 +8,8 @@ from typing import Any, ClassVar
 class Settings(BaseSettings):
     app_name: str = "Awesome API"
 
+    #General
+    origins: list = ["*"]
     #Database
     db_engine: str
     db_host: str

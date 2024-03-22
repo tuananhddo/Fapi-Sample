@@ -31,6 +31,31 @@ alembic revision --autogenerate -m "Description of changes"
 ## Run
 poetry run uvicorn src.main:app --reload
 
-#Document
+# Document
 https://fastapi.tiangolo.com/learn/
 https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save-files-in-chunks
+
+
+# What project has implemented ?
+- Manage package by poetry ( Similar to Nodejs Npm)
+- Database interacting by SqlAlchemy
+- Database migration with Alembic
+- Setup env by dotenv and pydantic
+- Example APIs with request/response schema and validation
+- Custom OpenAPI
+# What will be implement ?
+- Authentication
+- Paging
+- Handle Exception
+- Add Logger/ Jaeger
+- Update DB to SQlAlchemy 2.0 and async / connection pool
+- Docker / Production
+- With third-library ( Kafka / S3 / ...)
+    + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
+    + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
+    + https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html
+# Tips:
+- Switch case with additional data
+- from array import array
+- kwargs /args
+- z = [(x, y) for x in xs for y in ys]
