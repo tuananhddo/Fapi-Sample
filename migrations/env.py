@@ -24,7 +24,7 @@ current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
 print("Current directory:", current_directory)
 
-from src.models.base import Base
+from src.models.user import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

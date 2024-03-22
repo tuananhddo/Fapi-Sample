@@ -3,7 +3,7 @@ from ..schemas import base as schemas
 from src import crud
 from src.database import SessionLocal
 from sqlalchemy.orm import Session
-
+from src.utils import auth
 router = APIRouter(prefix="/sample")
 
 
@@ -36,6 +36,7 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
+    user.password = auth.get_password_hash(user.password)
     return crud.create_user(db=db, user=user)
 
 

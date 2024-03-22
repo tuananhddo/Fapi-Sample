@@ -1,4 +1,9 @@
+from datetime import datetime, timedelta, timezone
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+from jose import JWTError, jwt
+from src.settings import settings
+from src.models.user import User
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 # pwd_context = CryptContext(schemes=["argon2"], argon2__memory_cost=65536, argon2__time_cost=3, argon2__parallelism=4, argon2__variant="id")
@@ -8,3 +13,21 @@ def verify_password(plain_password, hashed_password):
 
 def get_password_hash(password):
     return pwd_context.hash(password)
+
+def authenticate(session: Session, username:str, password: str):
+    user: User = session.query(User).filter(User.username == username).first()
+    if not user:
+        return None
+    if not verify_password(password, user.password):
+        return None
+    return user
+
+def create_access_token(data):
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_access_token_expired)
+    raw_data = {**data, "exp": expire}
+    return jwt.encode(raw_data, settings.jwt_access_secret_key, algorithm=settings.jwt_access_algorithm)
+
+def create_refresh_token(data):
+    expire = datetime.now(timezone.utc) + timedelta(hours=settings.jwt_refresh_token_expired)
+    raw_data = {**data, "exp": expire}
+    return jwt.encode(raw_data, settings.jwt_refresh_secret_key, algorithm=settings.jwt_refresh_algorithm)

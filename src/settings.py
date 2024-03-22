@@ -17,10 +17,15 @@ class Settings(BaseSettings):
     db_password: str
     db_name: str
     #Jwt
-    jwt_secret_key: str
-    jwt_algorithm: str
+    jwt_access_algorithm: str
+    jwt_access_secret_key: str
+    jwt_access_token_expired: int = 30 # Minutes
+
+    jwt_refresh_algorithm: str
+    jwt_refresh_secret_key: str
+    jwt_refresh_token_expired: int = 24 # Hours
 
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
 
 
-settings = Settings()
+settings: Settings = Settings()

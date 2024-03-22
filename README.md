@@ -50,6 +50,10 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Add Logger/ Jaeger
 - Update DB to SQlAlchemy 2.0 and async / connection pool
 - Docker / Production
+- Socket
+- Testing
+- Streaming Response
+- Lifespan event
 - With third-library ( Kafka / S3 / ...)
     + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
     + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
