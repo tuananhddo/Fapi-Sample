@@ -43,21 +43,23 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Setup env by dotenv and pydantic
 - Example APIs with request/response schema and validation
 - Custom OpenAPI
-# What will be implement ?
 - Authentication
+
+# What will be implement ?
 - Paging
 - Handle Exception
 - Add Logger/ Jaeger
-- Update DB to SQlAlchemy 2.0 and async / connection pool
+- Update DB to SQlAlchemy 2.0 and async / connection pool and SQLModel
+    + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
+    + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
+    + https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html
 - Docker / Production
 - Socket
 - Testing
 - Streaming Response
 - Lifespan event
-- With third-library ( Kafka / S3 / ...)
-    + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
-    + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
-    + https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html
+- With third-library ( Kafka / S3 / Redis-Logout ...)
+
 # Tips:
 - Switch case with additional data
 - from array import array

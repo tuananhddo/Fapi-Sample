@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta, timezone
+import traceback
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
+from src.dependencies import SessionDep
+from src.schemas.responses.token import TokenPayload
 from src.settings import settings
 from src.models.user import User
 
@@ -31,3 +36,25 @@ def create_refresh_token(data):
     expire = datetime.now(timezone.utc) + timedelta(hours=settings.jwt_refresh_token_expired)
     raw_data = {**data, "exp": expire}
     return jwt.encode(raw_data, settings.jwt_refresh_secret_key, algorithm=settings.jwt_refresh_algorithm)
+
+def verify_refresh_token(session: Session, token: str):
+    try:
+        payload = jwt.decode(
+            token, settings.jwt_refresh_secret_key, algorithms=[settings.jwt_refresh_algorithm]
+        )
+        print(payload)
+        token_data = TokenPayload(**payload)
+    except (JWTError, ValidationError) as e:
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+
+
+    user: User = session.query(User).filter(User.username == token_data.sub).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return user

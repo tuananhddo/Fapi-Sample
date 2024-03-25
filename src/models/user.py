@@ -15,7 +15,9 @@ class User(Base):
 
     items = relationship("Item", back_populates="owner")
 
-
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
 class Item(Base):
     __tablename__ = "items"
 

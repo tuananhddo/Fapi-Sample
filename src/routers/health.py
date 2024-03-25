@@ -7,7 +7,7 @@ from src.utils.auth import get_password_hash
 from sqlalchemy.orm import Session
 
 
-router = APIRouter()
+router = APIRouter(prefix="/hth", tags=['health test'])
 
 def get_db():
     db = SessionLocal()

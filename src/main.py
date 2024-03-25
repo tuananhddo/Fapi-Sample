@@ -4,7 +4,7 @@ from fastapi.openapi.utils import get_openapi
 from src.settings import settings
 from .routers.users import router as su_router
 from .routers.auth import router as auth_router
-from .routers.u_examples import router as test_router
+from .routers.health import router as health_router
 
 # from .routers import users
 
@@ -13,7 +13,7 @@ app = FastAPI()
 # app.include_router(users.router)
 app.include_router(su_router)
 app.include_router(auth_router)
-app.include_router(test_router)
+app.include_router(health_router)
 
 # app.add_middleware(
 #     CORSMiddleware,
