@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 from fastapi import APIRouter, Depends, Header
 
@@ -6,6 +7,8 @@ from src.database import SessionLocal
 from src.utils.auth import get_password_hash
 from sqlalchemy.orm import Session
 
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger("fastapi")
 
 router = APIRouter(prefix="/hth", tags=['health test'])
 
@@ -18,11 +21,11 @@ def get_db():
         
 @router.get("/ping")
 async def root():
+    logger.info("ZZZZ")
     return {"message": "Pong"}
 
 @router.get("/env")
 async def envs(user_agent: Annotated[str | None, Header()]):
-    print(get_password_hash("test"))
     return {"message": settings}
 
 @router.get("/db")

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import logging
 import traceback
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
@@ -10,6 +11,7 @@ from src.schemas.responses.token import TokenPayload
 from src.settings import settings
 from src.models.user import User
 
+logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 # pwd_context = CryptContext(schemes=["argon2"], argon2__memory_cost=65536, argon2__time_cost=3, argon2__parallelism=4, argon2__variant="id")
 
@@ -39,10 +41,10 @@ def create_refresh_token(data):
 
 def verify_refresh_token(session: Session, token: str):
     try:
+        logger.info("payload")
         payload = jwt.decode(
             token, settings.jwt_refresh_secret_key, algorithms=[settings.jwt_refresh_algorithm]
         )
-        print(payload)
         token_data = TokenPayload(**payload)
     except (JWTError, ValidationError) as e:
         traceback.print_exc()

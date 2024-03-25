@@ -1,0 +1,24 @@
+# logging.yaml
+version: 1  # Specify the configuration format version
+
+formatters:
+  simple:  # Define a formatter name and its format string
+    format: "%(asctime)s - %(levelname)s - %(message)s"
+    datefmt: '%Y-%m-%d %H:%M:%S'
+
+handlers:
+  console:  # Define a console handler
+    class: logging.StreamHandler
+    level: INFO  # Set the logging level for the console handler
+    formatter: simple  # Use the 'simple' formatter
+
+  file:  # Define a file handler
+    class: logging.TimedRotatingFileHandler
+    filename: 'C:\Users\anh.dotuan1\Documents\Lox\myapp.log'  # Specify the log file name
+    level: DEBUG  # Set the logging level for the file handler
+    formatter: simple  # Use the 'simple' formatter
+
+loggers:
+  root:  # Configure the root logger
+    level: DEBUG  # Set the root logger level
+    handlers: [console, file]  # Set handlers for the root logger

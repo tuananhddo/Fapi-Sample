@@ -1,6 +1,8 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
+from src.log_config import load_config
 from src.settings import settings
 from .routers.users import router as su_router
 from .routers.auth import router as auth_router
@@ -14,6 +16,12 @@ app = FastAPI()
 app.include_router(su_router)
 app.include_router(auth_router)
 app.include_router(health_router)
+
+config = load_config('src\logging.yaml')
+logging.config.dictConfig(config)
+
+# Example usage:
+print(config)
 
 # app.add_middleware(
 #     CORSMiddleware,
