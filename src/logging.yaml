@@ -1,9 +1,10 @@
 # logging.yaml
 version: 1  # Specify the configuration format version
+disable_existing_loggers: False
 
 formatters:
   simple:  # Define a formatter name and its format string
-    format: "%(asctime)s - %(levelname)s - %(message)s"
+    format: "AK47 %(asctime)s - %(levelname)s - %(message)s"
     datefmt: '%Y-%m-%d %H:%M:%S'
 
 handlers:
@@ -19,6 +20,6 @@ handlers:
     formatter: simple  # Use the 'simple' formatter
 
 loggers:
-  root:  # Configure the root logger
+  "":  # Configure the root logger
     level: DEBUG  # Set the root logger level
     handlers: [console, filez]  # Set handlers for the root logger

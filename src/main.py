@@ -1,8 +1,9 @@
-import logging
-from fastapi import FastAPI
+import os
+import src.log_config
+
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
-from src.log_config import load_config
 from src.settings import settings
 from .routers.users import router as su_router
 from .routers.auth import router as auth_router
@@ -12,17 +13,28 @@ from .routers.health import router as health_router
 
 app = FastAPI()
 
+
 # app.include_router(users.router)
 app.include_router(su_router)
 app.include_router(auth_router)
 app.include_router(health_router)
 
-config = load_config('src\logging.yaml')
-logging.config.dictConfig(config)
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse, PlainTextResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi import status
+from fastapi.encoders import jsonable_encoder
+# @app.exception_handler(StarletteHTTPException)
+# async def http_exception_handler(request, exc):
+#     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
+
+
+# @app.exception_handler(RequestValidationError)
+# async def http_exception_handler(request, exc):
+#     return PlainTextResponse(str(exc), status_code=400)
+
 
 # Example usage:
-print(config)
-
 # app.add_middleware(
 #     CORSMiddleware,
 #     allow_origins=settings.origins,
@@ -64,3 +76,32 @@ print(config)
 
 # # Assign the custom_openapi function to the app.openapi attribute
 # app.openapi = custom_openapi
+
+
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
+
+class UnicornException(Exception):
+    def __init__(self, name: str):
+        self.name = name
+
+
+@app.exception_handler(UnicornException)
+async def unicorn_exception_handler(request: Request, exc: UnicornException):
+    return JSONResponse(
+        status_code=418,
+        content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
+    )
+
+# @app.exception_handler(RequestValidationError)
+# async def validation_exception_handler(request, exc):
+#     print("CMD")
+#     return PlainTextResponse("CMD", status_code=400)
+
+@app.get("/unicorns/{name}")
+async def read_unicorn(name: str):
+    if name == "yolo":
+        raise UnicornException(name=name)
+    return {"unicorn_name": name}
+

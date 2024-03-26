@@ -1,9 +1,5 @@
-import os
-from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pathlib import Path
-from typing import Any, ClassVar
-
+from pydantic import computed_field
 
 class Settings(BaseSettings):
     app_name: str = "Awesome API"
@@ -16,6 +12,12 @@ class Settings(BaseSettings):
     db_username: str
     db_password: str
     db_name: str
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def db_url(self) -> str:
+        return f"{self.db_engine}://{self.db_username}:{self.db_password}@{self.db_host}:5432/{self.db_name}"
+
     #Jwt
     jwt_access_algorithm: str
     jwt_access_secret_key: str
@@ -24,7 +26,8 @@ class Settings(BaseSettings):
     jwt_refresh_algorithm: str
     jwt_refresh_secret_key: str
     jwt_refresh_token_expired: int = 24 # Hours
-
+    
+    #Loader
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8', extra='ignore')
 
 

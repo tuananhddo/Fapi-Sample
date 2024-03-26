@@ -4,11 +4,9 @@ from fastapi import APIRouter, Depends, Header
 
 from src import settings
 from src.database import SessionLocal
-from src.utils.auth import get_password_hash
 from sqlalchemy.orm import Session
 
-# logging.basicConfig(level=logging.INFO)
-# logger = logging.getLogger("fastapi")
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/hth", tags=['health test'])
 
@@ -21,7 +19,9 @@ def get_db():
         
 @router.get("/ping")
 async def root():
-    logger.info("ZZZZ")
+    # logging.info("This is an info message")
+    logger.warning("email-validator not installed, email fields will be treated as str.\n"
+                "To install, run: pip install email-validator")
     return {"message": "Pong"}
 
 @router.get("/env")
