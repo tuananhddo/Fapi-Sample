@@ -2,8 +2,6 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from src.models.base import BaseModel
 
-
-
 class User(BaseModel):
     __tablename__ = "users"
 
@@ -13,6 +11,7 @@ class User(BaseModel):
     name = Column(String)
     password = Column(String)
     is_active = Column(Boolean, default=True)
+    is_active2 = Column(Boolean, default=True)
 
     items = relationship("Item", back_populates="owner")
 
