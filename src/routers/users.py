@@ -3,19 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.dependencies import SessionDep
 from ..schemas import base as schemas
 from src import crud
-from src.database import SessionLocal
-from sqlalchemy.orm import Session
 from src.utils import auth
 
 router = APIRouter(prefix="/users", tags=['users'])
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/users/", response_model=schemas.User)

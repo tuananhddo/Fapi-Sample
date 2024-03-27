@@ -1,22 +1,24 @@
 import logging
-from typing import Annotated
 from fastapi import APIRouter, Depends, Header
+from pydantic import BaseModel, ValidationError, validator
 
-from src import settings
-from src.database import SessionLocal
-from sqlalchemy.orm import Session
+from src.core.settings import settings
+
+from src.exceptions.exceptions import CustomException
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/hth", tags=['health test'])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
         
+class MyModel(BaseModel):
+    value: int
+
+    @validator('value')
+    def check_value(cls, v):
+        if v < 10:
+            raise ValueError("Value must be greater than or equal to 0")
+        raise CustomException(name='1')
+
 @router.get("/ping")
 async def root():
     # logging.info("This is an info message")
@@ -25,11 +27,18 @@ async def root():
     return {"message": "Pong"}
 
 @router.get("/env")
-async def envs(user_agent: Annotated[str | None, Header()]):
+async def envs(param: int):
     return {"message": settings}
 
-@router.get("/db")
-async def test_tnx(db: Session = Depends(get_db)):
-    return {"message": "Pong"}
+
+@router.post("/vlida")
+async def envs(model: MyModel):
+    return {"message": settings}
 
 
+@router.get("/unicorns/{name}")
+async def read_unicorn(name: str):
+    if name == "yolo":
+        raise CustomException(name=name)
+    raise ValidationError("HELPER")
+    # return {"unicorn_name": name}

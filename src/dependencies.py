@@ -8,10 +8,10 @@ from pydantic import BaseModel, ValidationError
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 
-from src.database import SessionLocal
+from src.core.database import SessionLocal
 from src.models.user import User
 from src.schemas.responses.token import TokenPayload
-from src.settings import settings
+from src.core.settings import settings
 
 
 

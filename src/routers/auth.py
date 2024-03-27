@@ -11,7 +11,7 @@ from src.dependencies import SessionDep, get_current_active_superuser, get_curre
 from src.models.user import User
 from src.schemas.responses.token import AccessToken, LoginToken, RefreshToken
 from src.schemas.responses.user import ResponseUser
-from src.settings import settings
+from src.core.settings import settings
 from src.utils import auth
 
 # to get a string like this run:

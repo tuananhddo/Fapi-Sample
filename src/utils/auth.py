@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from src.dependencies import SessionDep
 from src.schemas.responses.token import TokenPayload
-from src.settings import settings
+from src.core.settings import settings
 from src.models.user import User
 
 logger = logging.getLogger(__name__)
