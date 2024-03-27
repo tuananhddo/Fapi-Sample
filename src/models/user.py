@@ -14,6 +14,3 @@ class User(BaseModel):
     is_active2 = Column(Boolean, default=True)
 
     items = relationship("Item", back_populates="owner")
-
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
