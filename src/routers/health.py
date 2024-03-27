@@ -8,7 +8,7 @@ from src.exceptions.exceptions import CustomException
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/hth", tags=['health test'])
+router = APIRouter(prefix="/health", tags=['health test'])
         
 class MyModel(BaseModel):
     value: int
@@ -41,4 +41,3 @@ async def read_unicorn(name: str):
     if name == "yolo":
         raise CustomException(name=name)
     raise ValidationError("HELPER")
-    # return {"unicorn_name": name}

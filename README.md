@@ -45,13 +45,15 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Custom OpenAPI
 - Authentication
 - Add Logger
-# What will be implement ?
-- Paging
 - Handle Exception
+
+# What will be implement ?
+- Paging ( limit /offset or st) <+ Test Autocommit>
 - Add Tracer (Jaeger)
 - Docker / Production
 - Socket
 - Testing
+- Timezone setup
 - Streaming Response
 - Lifespan event
 - With third-library ( Kafka / S3 / Redis-Logout ...)
