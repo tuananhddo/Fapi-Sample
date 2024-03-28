@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.dependencies import SessionDep
+from src import models
+from src.dependencies import CurrentUser, SessionDep
 from ..schemas import base as schemas
-from src import crud
+from src.services import user_service as crud
 from src.utils import auth
 
 router = APIRouter(prefix="/users", tags=['users'])
@@ -16,6 +17,13 @@ def create_user(user: schemas.UserCreate, db: SessionDep):
     user.password = auth.get_password_hash(user.password)
     return crud.create_user(db=db, user=user)
 
+@router.put("/users", response_model=schemas.User)
+def update_user(current_user: CurrentUser, update_model: schemas.UserUpdate, session: SessionDep):
+    current_user.name = update_model.name
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+    return current_user
 
 @router.get("/users/", response_model=list[schemas.User])
 def read_users(db: SessionDep, skip: int = 0, limit: int = 100):

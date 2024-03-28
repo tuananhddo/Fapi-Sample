@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter, Depends, Header
-from pydantic import BaseModel, ValidationError, validator
+from pydantic import BaseModel, ValidationError, field_validator, validator
 
 from src.core.settings import settings
 
@@ -13,13 +13,14 @@ router = APIRouter(prefix="/health", tags=['health test'])
 class MyModel(BaseModel):
     value: int
 
-    @validator('value')
+    @field_validator('value')
+    @classmethod
     def check_value(cls, v):
         if v < 10:
             raise ValueError("Value must be greater than or equal to 0")
         raise CustomException(name='1')
 
-@router.get("/ping")
+@router.get("/")
 async def root():
     # logging.info("This is an info message")
     logger.warning("email-validator not installed, email fields will be treated as str.\n"

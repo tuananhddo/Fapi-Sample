@@ -30,7 +30,8 @@ alembic revision --autogenerate -m "Description of changes"
 
 ## Run
 poetry run uvicorn src.main:app --reload
-
+## Testing
+pytest ./src/tests 
 # Document
 https://fastapi.tiangolo.com/learn/
 https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save-files-in-chunks

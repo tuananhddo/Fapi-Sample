@@ -7,13 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-gino = {extras = ["starlette"], version = "^1.0.1"}
 alembic = "^1.13.1"
 psycopg2 = "^2.9.9"
 fastapi = "^0.110.0"
 uvicorn = "^0.27.1"
 gunicorn = "^21.2.0"
-sqlalchemy = "1.3.18"
+sqlalchemy = "1.4.52"
 pydantic = "^2.6.4"
 python-dotenv = "^1.0.1"
 pydantic-settings = "^2.2.1"
@@ -27,6 +26,7 @@ pyyaml = "^6.0.1"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.0"
 requests = "^2.31.0"
+httpx = "^0.27.0"
 
 [build-system]
 requires = ["poetry-core"]
