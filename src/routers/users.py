@@ -9,7 +9,7 @@ from src.utils import auth
 router = APIRouter(prefix="/users", tags=['users'])
 
 
-@router.post("/users/", response_model=schemas.User)
+@router.post("/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: SessionDep):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -17,7 +17,7 @@ def create_user(user: schemas.UserCreate, db: SessionDep):
     user.password = auth.get_password_hash(user.password)
     return crud.create_user(db=db, user=user)
 
-@router.put("/users", response_model=schemas.User)
+@router.put("/", response_model=schemas.User)
 def update_user(current_user: CurrentUser, update_model: schemas.UserUpdate, session: SessionDep):
     current_user.name = update_model.name
     session.add(current_user)
@@ -25,13 +25,13 @@ def update_user(current_user: CurrentUser, update_model: schemas.UserUpdate, ses
     session.refresh(current_user)
     return current_user
 
-@router.get("/users/", response_model=list[schemas.User])
+@router.get("/", response_model=list[schemas.User])
 def read_users(db: SessionDep, skip: int = 0, limit: int = 100):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
 
 
-@router.get("/users/{user_id}", response_model=schemas.User)
+@router.get("/{user_id}", response_model=schemas.User)
 def read_user(user_id: int, db: SessionDep):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
@@ -39,7 +39,7 @@ def read_user(user_id: int, db: SessionDep):
     return db_user
 
 
-@router.post("/users/{user_id}/items/", response_model=schemas.Item)
+@router.post("/{user_id}/items/", response_model=schemas.Item)
 def create_item_for_user(
     user_id: int, item: schemas.ItemCreate, db: SessionDep
 ):
