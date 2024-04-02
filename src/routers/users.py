@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src import models
 from src.dependencies import CurrentUser, SessionDep
+from src.exceptions.exceptions import DataNotFound, DuplicateData
 from ..schemas import base as schemas
 from src.services import user_service as crud
 from src.utils import auth
@@ -13,7 +14,7 @@ router = APIRouter(prefix="/users", tags=['users'])
 def create_user(user: schemas.UserCreate, db: SessionDep):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise DuplicateData(identity_field="Email", message_template="{} already registered")
     user.password = auth.get_password_hash(user.password)
     return crud.create_user(db=db, user=user)
 

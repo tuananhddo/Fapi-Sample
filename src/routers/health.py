@@ -22,7 +22,7 @@ class MyModel(BaseModel):
 
 @router.get("/")
 async def root():
-    # logging.info("This is an info message")
+    logger.info("This is an info message")
     logger.warning("email-validator not installed, email fields will be treated as str.\n"
                 "To install, run: pip install email-validator")
     return {"message": "Pong"}

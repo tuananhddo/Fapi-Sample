@@ -3,10 +3,10 @@ import types
 
 from src.core.openapi import custom_openapi
 from src.exceptions.exception_handler import (
-    general_handler, http_exception_handler, 
+    duplicate_exception_handler, general_handler, http_exception_handler, 
     unicorn_exception_handler, validation_exception_handler
 )
-from src.exceptions.exceptions import CustomException
+from src.exceptions.exceptions import CustomException, DuplicateData
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -28,6 +28,7 @@ app = FastAPI()
 # )
 app.openapi = types.MethodType(custom_openapi, app)
 
+app.add_exception_handler(DuplicateData, duplicate_exception_handler)
 app.add_exception_handler(CustomException, unicorn_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)

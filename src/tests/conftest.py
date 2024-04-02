@@ -21,22 +21,29 @@ def engine():
     """
     Creates a SQLAlchemy engine for testing.
     """
-    DB_NAME = generate_test_db_name()
-    TEST_DATABASE_URL = f"{settings.db_engine}://{settings.db_username}:{settings.db_password}@{settings.db_host}:5432/"
+
+    # DB_NAME = generate_test_db_name()
+    # print(DB_NAME)
+    DB_NAME = "test_lmhtrgyier"
+    TEST_DATABASE_URL = f"{settings.db_engine}://{settings.db_username}:{settings.db_password}@{settings.db_host}:5432/{DB_NAME}"
     engine = create_engine(TEST_DATABASE_URL)
+    from sqlalchemy_utils import database_exists, create_database, drop_database
 
-    # with engine.connect() as conn:
-    #     conn.execute("CREATE DATABASE IF NOT EXISTS {DB_NAME}")
-    # engine.execute(f"DROP DATABASE IF EXISTS {DB_NAME}")
-    engine.execute(f"CREATE DATABASE {DB_NAME}")
+    if not database_exists(TEST_DATABASE_URL):
+        create_database(TEST_DATABASE_URL)
+        Base.metadata.create_all(engine)  # Create all tables
 
-    # engine.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME}")
+    # if database_exists(TEST_DATABASE_URL):
+    #     Base.metadata.drop_all(engine)
+    #     drop_database(TEST_DATABASE_URL)
 
-    # Base.metadata.create_all(engine)  # Create all tables
-
+    # create_database(TEST_DATABASE_URL)
+    # Base.metadata.create_all(engine)   
+    # Todo: init db data
     yield engine
+
     # Base.metadata.drop_all(engine)  # Drop all tables after tests
-    # engine.execute(f"DROP DATABASE {DB_NAME}")
+    # drop_database(TEST_DATABASE_URL)
     engine.dispose()
 
 @pytest.fixture(scope="session")
@@ -51,13 +58,8 @@ def session(session_factory):
     """
     with session_factory() as session:
         # init_db(session)
-        print("XXXXXXXXXXXXXXX")
         yield session
 
-# @pytest.fixture(scope="module")
-# def client() -> Generator[TestClient, None, None]:
-#     with TestClient(app) as c:
-#         yield c
 
 @pytest.fixture(scope="function")
 def client(session):
