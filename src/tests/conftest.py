@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.models import *
 from src.models.base import Base
+from .db_utils import clear_user
 
 def generate_test_db_name():
     import random
@@ -59,10 +60,16 @@ def session(session_factory):
     with session_factory() as session:
         # init_db(session)
         yield session
-
+        # session.rollback()  # Rollback after test
+    # try:
+    #     session = session_factory()
+    #     yield session
+    # finally:
+    #     session.rollback()  # Rollback any changes
+    #     session.close() 
 
 @pytest.fixture(scope="function")
-def client(session):
+def client(session, clear_user):
     """
     Creates a FastAPI test client with access to the test session.
     """
