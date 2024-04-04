@@ -12,7 +12,6 @@ def to_test_params(config_dict: dict):
     is_exist = all(key in config_dict for key in ["name", "value"])
     if not is_exist:
         raise ValueError("Missing name or value if config_dict")
-    print(",".join(config_dict['name']), to_param(config_dict['value'], len(config_dict['name'])))
     return (",".join(config_dict['name']), to_param(config_dict['value'], len(config_dict['name'])))
 
 
