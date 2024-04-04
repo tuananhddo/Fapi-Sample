@@ -1,22 +1,32 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
-from src.models import user as models
+from src.exceptions.exceptions import DuplicateData
 from src.schemas import base as schemas
+from src.models.user import User
+from src.models.item import Item
+
+
+def check_user_not_exist(db: Session, rq: schemas.UserCreate):
+    user = db.query(User).filter(or_(User.email == rq.email, User.username == rq.username)).first()
+    if user:
+        raise DuplicateData(identity_field="Email, Username", message_template="{} already registered")
+    return user
 
 def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(models.User).filter(models.User.email == email).first()
+    return db.query(User).filter(User.email == email).first()
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+    return db.query(User).offset(skip).limit(limit).all()
 
 
 def create_user(db: Session, user: schemas.UserCreate):
-    db_user = models.User(**user.model_dump())
+    db_user = User(**user.model_dump())
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -24,11 +34,11 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 
 def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
+    return db.query(Item).offset(skip).limit(limit).all()
 
 
 def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-    db_item = models.Item(**item.model_dump(), owner_id=user_id)
+    db_item = Item(**item.model_dump(), owner_id=user_id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

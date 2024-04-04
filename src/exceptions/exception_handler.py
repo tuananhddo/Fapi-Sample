@@ -33,13 +33,15 @@ async def validation_exception_handler(request, exc):
     # return PlainTextResponse("validation handler", status_code=400)
     print("Do Anything Here. E.g i18n")
     return JSONResponse(
-        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        status_code=status.HTTP_400_BAD_REQUEST,
         content=jsonable_encoder({"detail": exc.errors(), "body": exc.body}),
     )
 
 async def general_handler(request, exc):
-    return PlainTextResponse("general_handler", status_code=400)
-
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content=jsonable_encoder({"detail": "Internal Error"}),
+    )
 async def http_exception_handler(request, exc):
     return PlainTextResponse(f"HTTP {str(exc.detail)}", status_code=exc.status_code)
 

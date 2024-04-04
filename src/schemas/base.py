@@ -1,5 +1,9 @@
-from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
+from typing import Annotated
+from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, ValidationError, ValidationInfo, field_validator, model_validator
 
+from src.utils.string import check_special_characters, check_strong_password
+
+Password = Annotated[str, AfterValidator(check_strong_password)]
 
 class ItemBase(BaseModel):
     title: str
@@ -18,19 +22,27 @@ class Item(ItemBase):
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
     username: str
     name: str
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=4)
+    password: Password
 
-    @field_validator('username', 'password')
+    @field_validator('username')
     @classmethod
     def check_strong(cls, v: str, info: ValidationInfo) -> str:
-        print('1')
+        check_special_characters(v)
         return v
-
+    
+    @model_validator(mode='after')
+    def check_complex(self) -> "UserCreate":
+        pwd = self.password
+        usn = self.username
+        if pwd in usn or usn in pwd:
+            raise ValueError("Username and password too similar")
+        return self
+    
 class UserUpdate(BaseModel):
     name: str
 
