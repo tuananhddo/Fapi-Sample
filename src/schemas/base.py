@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, ValidationError, ValidationInfo, field_validator, model_validator
 
 from src.utils.string import check_special_characters, check_strong_password
@@ -34,6 +34,12 @@ class UserCreate(UserBase):
     def check_strong(cls, v: str, info: ValidationInfo) -> str:
         check_special_characters(v)
         return v
+    
+    @field_validator('email')
+    def email_max_length(cls, value):
+        if len(value) > 254:
+            raise ValueError("Email address exceeds maximum length of 254 characters")
+        return value
     
     @model_validator(mode='after')
     def check_complex(self) -> "UserCreate":

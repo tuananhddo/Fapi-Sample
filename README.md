@@ -47,13 +47,13 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Authentication
 - Add Logger
 - Handle Exception
+- Testing
 
 # What will be implement ?
-- Paging ( limit /offset or st) <+ Test Autocommit>
+- Paging ( limit /offset or other method) <+ Test Autocommit>
 - Add Tracer (Jaeger)
 - Docker / Production
 - Socket
-- Testing
 - Timezone setup
 - Streaming Response
 - Lifespan event

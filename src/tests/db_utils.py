@@ -2,9 +2,19 @@ import pytest
 from sqlalchemy import delete
 
 from src.models.user import User
+from src.utils.string import get_random_str
+
+def get_random_email(email_len: int):
+    return f"{get_random_str(email_len - 8)}@{get_random_str(3)}.com"
+
+def get_custom_random_email(username_len: int, domain: str = None):
+    if not domain:
+        domain = f"{get_random_str(5)}.com"
+    return f"{get_random_str(username_len)}@{domain}"
 
 def extract_to_dict(suite_list, param_num):
     return [ {"data": test_data, "test_name": None} if len(test_data) == param_num else {"data": test_data[:-1], "test_name": test_data[-1]} for test_data in suite_list]
+
 def to_param(suite_list, param_num):
     return [pytest.param(*(item["data"]), id=item["test_name"]) for item in extract_to_dict(suite_list, param_num)]
 

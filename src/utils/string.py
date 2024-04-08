@@ -1,7 +1,10 @@
 import re
-
+from secrets import choice
 from pydantic import ValidationError
+import string
 
+def get_random_str(len: int):
+    return ''.join([choice(string.ascii_letters + string.digits) for _ in range(len)])
 
 def check_special_characters(value):
     if re.search(r"[^\w\s]", value):
