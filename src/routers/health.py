@@ -1,4 +1,6 @@
 import logging
+
+from celery import chain
 from fastapi import APIRouter, Depends, Header
 from pydantic import BaseModel, ValidationError, field_validator, validator
 
@@ -29,6 +31,11 @@ async def root():
 
 @router.get("/env")
 async def envs(param: int):
+    from src.celery_worker.tasks import crawl_site_task, logger
+
+    task_chain = chain(crawl_site_task.s("url", "sender_info", "recipient_info"),)
+    task = task_chain.apply_async()
+    logger.info(f"Task ${task.id}")
     return {"message": settings}
 
 

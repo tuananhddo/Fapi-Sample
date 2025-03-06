@@ -24,7 +24,8 @@ python-multipart = "^0.0.20"
 pyyaml = "^6.0.1"
 email-validator = "^2.1.1"
 sqlmodel = "^0.0.23"
-
+celery = {extras = ["pydantic"], version = "^5.4.0"}
+redis = "^5.0.4"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.0"
 requests = "^2.31.0"
