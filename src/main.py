@@ -14,6 +14,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .core.database import create_db_and_tables, reset_database
+from .core.log_config import configure_logging
 from .routers.users import router as su_router
 from .routers.auth import router as auth_router
 from .routers.health import router as health_router
@@ -32,6 +33,8 @@ app = FastAPI()
 #     allow_credentials=True,
 #     allow_methods=["*"],
 # )
+configure_logging()
+
 app.openapi = types.MethodType(custom_openapi, app)
 
 app.add_exception_handler(DuplicateData, duplicate_exception_handler)

@@ -45,9 +45,9 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Example APIs with request/response schema and validation
 - Custom OpenAPI
 - Authentication
-- Add Logger
 - Handle Exception
 - Testing
+- Add Logger
 
 # What will be implement ?
 - Update document
@@ -60,6 +60,7 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Lifespan event
 - With third-library ( Kafka / S3 / Redis-Logout ...)
 - Using async / connection pool
+    + https://arunanshub.hashnode.dev/async-database-operations-with-sqlmodel
     + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
     + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
     + https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html

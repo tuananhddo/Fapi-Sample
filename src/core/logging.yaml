@@ -15,7 +15,7 @@ handlers:
 
   filez:  # Define a file handler
     class: logging.handlers.TimedRotatingFileHandler
-    filename: 'C:\Users\anh.dotuan1\Documents\Lox\myapp.log'  # Specify the log file name
+    filename: 'D:\ProjectData\Logs\myapp.log'  # Specify the log file name
     level: DEBUG  # Set the logging level for the file handler
     formatter: simple  # Use the 'simple' formatter
 
