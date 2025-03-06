@@ -3,7 +3,8 @@ from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field, Val
 
 from src.utils.string import check_special_characters, check_strong_password
 
-Password = Annotated[str, AfterValidator(check_strong_password)]
+# Password = Annotated[str, AfterValidator(check_strong_password)]
+Password = Annotated[str, "Password type"]
 
 class ItemBase(BaseModel):
     title: str
@@ -41,14 +42,14 @@ class UserCreate(UserBase):
             raise ValueError("Email address exceeds maximum length of 254 characters")
         return value
     
-    @model_validator(mode='after')
-    def check_complex(self) -> "UserCreate":
-        pwd = self.password
-        usn = self.username
-        if pwd in usn or usn in pwd:
-            raise ValueError("Username and password too similar")
-        return self
-    
+    # @model_validator(mode='after')
+    # def check_complex(self) -> "UserCreate":
+    #     pwd = self.password
+    #     usn = self.username
+    #     if pwd in usn or usn in pwd:
+    #         raise ValueError("Username and password too similar")
+    #     return self
+    #
 class UserUpdate(BaseModel):
     name: str
 

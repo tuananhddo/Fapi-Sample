@@ -50,6 +50,7 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Testing
 
 # What will be implement ?
+- Update document
 - Paging ( limit /offset or other method) <+ Test Autocommit>
 - Add Tracer (Jaeger)
 - Docker / Production
@@ -58,7 +59,7 @@ https://github.com/zhanymkanov/fastapi-best-practices?tab=readme-ov-file#17-save
 - Streaming Response
 - Lifespan event
 - With third-library ( Kafka / S3 / Redis-Logout ...)
-- Update DB to SQlAlchemy 2.0 and async / connection pool and SQLModel
+- Using async / connection pool
     + https://chaoticengineer.hashnode.dev/fastapi-sqlalchemy
     + https://dev.to/akarshan/asynchronous-database-sessions-in-fastapi-with-sqlalchemy-1o7e
     + https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html

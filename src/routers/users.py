@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src import models
@@ -8,6 +10,7 @@ from src.services import user_service
 from src.utils import auth
 
 router = APIRouter(prefix="/users", tags=['users'])
+logger = logging.getLogger(__name__)
 
 
 @router.post("/", response_model=schemas.User)
@@ -18,6 +21,8 @@ def create_user(user: schemas.UserCreate, db: SessionDep):
 
 @router.put("/", response_model=schemas.User)
 def update_user(current_user: CurrentUser, update_model: schemas.UserUpdate, session: SessionDep):
+    logger.info("Update")
+
     current_user.name = update_model.name
     session.add(current_user)
     session.commit()

@@ -1,13 +1,12 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from typing import Optional
+
 from src.models.base import BaseModel
+from sqlmodel import Field, Relationship
 
-class Item(BaseModel):
-    __tablename__ = "items"
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
-    owner = relationship("User", back_populates="items")
+class Item(BaseModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    title: str = Field(index=True)
+    description: str
+    owner_id: int = Field(foreign_key="user.id")
+    owner: Optional["User"] = Relationship(back_populates="items")

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlmodel import Session, select
 from sqlalchemy import or_
 
 from src.exceptions.exceptions import DuplicateData
@@ -14,11 +14,15 @@ def check_user_not_exist(db: Session, rq: schemas.UserCreate):
     return user
 
 def get_user(db: Session, user_id: int):
-    return db.query(User).filter(User.id == user_id).first()
+    return db.exec(
+        select(User).where(User.id == user_id)
+    ).first()
 
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(User).filter(User.email == email).first()
+    return db.exec(
+        select(User).where(User.email == email)
+    ).first()
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
