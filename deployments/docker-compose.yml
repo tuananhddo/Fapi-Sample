@@ -1,0 +1,115 @@
+version: "3.5"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+#  nginx:
+#    image: nginx:alpine
+#    container_name: nginx
+#    restart: always
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - ./conf.d/nginx.conf:/etc/nginx/conf.d/nginx.conf
+#    depends_on:
+#      - app
+#      - flowers
+
+  app:
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - postgres
+    environment:
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+
+#  celery_worker:
+#    build:
+#      context: ..
+#      dockerfile: deployments/Dockerfile
+#    command: celery -A celery_worker.celery_app worker --loglevel=info --concurrency 3 -Q default
+#    restart: always
+#    env_file:
+#      - ../.env
+#    depends_on:
+#      - app
+#      - rabbitmq
+#
+#  celery_beat:
+#    build:
+#      context: ..
+#      dockerfile: deployments/Dockerfile
+#    command: celery -A celery_worker.celery_app beat --loglevel=info --schedule=/data/beat-schedule
+#    restart: always
+#    env_file:
+#      - ../.env
+#    depends_on:
+#      - app
+#      - rabbitmq
+#    volumes:
+#      - celery_beat_data:/data
+#
+#  flowers:
+#    build:
+#      context: ..
+#      dockerfile: deployments/Dockerfile
+#    command: 'celery flower --port=5555 --persistent=True --db="/flower/flower_db" --basic_auth=admin:admin'
+#    restart: always
+#    volumes:
+#      - flower_db:/flower
+#    ports:
+#      - 5555:5555
+#    env_file:
+#      - ../.env
+#    depends_on:
+#      - rabbitmq
+
+volumes:
+  data:
+    driver: local
+  redis_data:
+  rabbitmq_data:
+  flower_db:
+  celery_beat_data:

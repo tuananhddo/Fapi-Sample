@@ -36,21 +36,15 @@ celery_app.conf.task_default_exchange = settings.CELERY_DEFAULT_EXCHANGE
 celery_app.conf.task_default_routing_key = settings.CELERY_DEFAULT_ROUTING_KEY
 
 logger = logging.getLogger("__main__")
-# app.config_from_object('django.fwd:settings', namespace='CELERY') # change here
-# app.config_from_object('django.conf:settings', namespace='CELERY')
-# app.autodiscover_tasks()
+
 # app.conf.timezone = DateUtil.default_zone
 # app.conf.update({
 #     'task_queues':
 #     [
-#         Queue('ocr_result'),
-#         # Queue('ocr'),
 #         Queue('delete_file'),
 #         Queue('update_result_status')
 #     ],
 #     'task_routes': {
-#         'ocr_result': {'queue': "ocr_result"},
-#         # 'ocr': {'queue': "ocr"},
 #         'delete_file': {'queue': 'delete_file'},
 #         'update_result_status': {'queue': 'update_result_status'},
 #     },
