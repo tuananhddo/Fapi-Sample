@@ -3,10 +3,10 @@ from ..core.settings import settings
 
 @celery_app.task(
     bind=True,
-    name="app.crawl_site_task",
+    name="app.data_collection_task",
     max_retries=settings.CELERY_RETRIES_TIME,
 )
-def crawl_site_task(self, url, x, y):
+def data_collection_task(self, url, x, y):
     try:
         print(self.request.id)
         logger.info(f"Crawling URL: {url}")

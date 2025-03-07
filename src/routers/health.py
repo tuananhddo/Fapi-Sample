@@ -31,9 +31,9 @@ async def root():
 
 @router.get("/env")
 async def envs(param: int):
-    from src.celery_worker.tasks import crawl_site_task, logger
+    from src.celery_worker.tasks import data_collection_task, logger
 
-    task_chain = chain(crawl_site_task.s("url", "sender_info", "recipient_info"),)
+    task_chain = chain(data_collection_task.s("url", "sender_info", "recipient_info"),)
     task = task_chain.apply_async()
     logger.info(f"Task ${task.id}")
     return {"message": settings}
