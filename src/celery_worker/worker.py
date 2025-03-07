@@ -1,7 +1,7 @@
 import logging
 
 from celery import Celery
-from src.core.settings import settings
+from ..core.settings import settings
 from kombu import Exchange, Queue
 
 celery_app: Celery = Celery(

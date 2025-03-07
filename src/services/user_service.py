@@ -1,10 +1,10 @@
 from sqlmodel import Session, select
 from sqlalchemy import or_
 
-from src.exceptions.exceptions import DuplicateData
-from src.schemas import base as schemas
-from src.models.user import User
-from src.models.item import Item
+from ..exceptions.exceptions import DuplicateData
+from ..schemas import base as schemas
+from ..models.user import User
+from ..models.item import Item
 
 
 def check_user_not_exist(db: Session, rq: schemas.UserCreate):

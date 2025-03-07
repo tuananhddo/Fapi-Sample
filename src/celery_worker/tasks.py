@@ -2,7 +2,7 @@ import json
 import redis
 
 from .worker import celery_app, logger
-from src.core.settings import settings
+from ..core.settings import settings
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 print(r.ping())
@@ -24,4 +24,4 @@ def crawl_site_task(self, url, sender_info, recipient_info):
         }
         return url
     except Exception as e:
-        logger.error(e)
+        logger.error("Err", exc_info=True)

@@ -1,15 +1,14 @@
 import pytest
 from fastapi.testclient import TestClient
 from collections.abc import Generator
-from src.core.settings import settings
-from src.dependencies import get_db
-from src.main import app
-from src.core.database import SessionLocal
+from ..core.settings import settings
+from ..dependencies import get_session
+from ..main import app
+from ..core.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.models import *
-from src.models.base import Base
+from ..models import *
 from .db_utils import clear_user
 
 def generate_test_db_name():
@@ -32,7 +31,7 @@ def engine():
 
     if not database_exists(TEST_DATABASE_URL):
         create_database(TEST_DATABASE_URL)
-        Base.metadata.create_all(engine)  # Create all tables
+        # Base.metadata.create_all(engine)  # Create all tables
 
     # if database_exists(TEST_DATABASE_URL):
     #     Base.metadata.drop_all(engine)
@@ -76,7 +75,7 @@ def client(session, clear_user):
     def override_get_db():
         yield session
 
-    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_session] = override_get_db
     client = TestClient(app)
     yield client
     app.dependency_overrides = {} 

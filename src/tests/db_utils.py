@@ -1,8 +1,8 @@
 import pytest
 from sqlalchemy import delete
 
-from src.models.user import User
-from src.utils.string import get_random_str
+from ..models.user import User
+from ..utils.string import get_random_str
 
 def get_random_email(email_len: int):
     return f"{get_random_str(email_len - 8)}@{get_random_str(3)}.com"

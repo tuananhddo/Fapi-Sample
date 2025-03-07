@@ -2,7 +2,7 @@ import logging
 
 import pytest
 from fastapi import status
-from src.tests.db_utils import discard_id, get_random_email, to_param, to_test_params
+from ..db_utils import discard_id, get_random_email, to_param, to_test_params
 
 
 logger = logging.getLogger(__name__)

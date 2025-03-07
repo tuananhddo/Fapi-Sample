@@ -24,9 +24,9 @@ current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
 print("Current directory:", current_directory)
 
-from src.models import *
-from src.models.base import Base
-target_metadata = Base.metadata
+# from src.models import *
+# from ..models.base import Base
+# target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -65,16 +65,16 @@ def run_migrations_offline() -> None:
 
     """
     # url = config.get_main_option("sqlalchemy.url")
-    url = get_url()
-    context.configure(
-        url=url,
-        target_metadata=target_metadata,
-        literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
-    )
-
-    with context.begin_transaction():
-        context.run_migrations()
+    # url = get_url()
+    # context.configure(
+    #     url=url,
+    #     target_metadata=target_metadata,
+    #     literal_binds=True,
+    #     dialect_opts={"paramstyle": "named"},
+    # )
+    #
+    # with context.begin_transaction():
+    #     context.run_migrations()
 
 
 def run_migrations_online() -> None:
@@ -89,21 +89,21 @@ def run_migrations_online() -> None:
     #     prefix="sqlalchemy.",
     #     poolclass=pool.NullPool,
     # )
-    configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = get_url()
-    connectable = engine_from_config(
-        configuration,
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
-
-        with context.begin_transaction():
-            context.run_migrations()
+    # configuration = config.get_section(config.config_ini_section)
+    # configuration["sqlalchemy.url"] = get_url()
+    # connectable = engine_from_config(
+    #     configuration,
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
+    #
+    # with connectable.connect() as connection:
+    #     context.configure(
+    #         connection=connection, target_metadata=target_metadata
+    #     )
+    #
+    #     with context.begin_transaction():
+    #         context.run_migrations()
 
 
 if context.is_offline_mode():

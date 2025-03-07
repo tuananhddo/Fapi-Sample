@@ -4,12 +4,12 @@ import traceback
 from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from pydantic import ValidationError
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from src.dependencies import SessionDep
-from src.schemas.responses.token import TokenPayload
-from src.core.settings import settings
-from src.models.user import User
+from sqlmodel import select, Session
+
+from ..schemas.responses.token import TokenPayload
+from ..core.settings import settings
+from ..models.user import User
 
 logger = logging.getLogger(__name__)
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
@@ -26,7 +26,9 @@ def get_password_hash(password):
 
 
 def authenticate(session: Session, username: str, password: str):
-    user: User = session.query(User).filter(User.username == username).first()
+    user: User = session.exec(
+        select(User).where(User.username == username)
+    ).first()
     if not user:
         return None
     if not verify_password(password, user.password):
@@ -35,22 +37,22 @@ def authenticate(session: Session, username: str, password: str):
 
 
 def create_access_token(data):
-    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.jwt_access_token_expired)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.JWT_ACCESS_TOKEN_EXPIRED)
     raw_data = {**data, "exp": expire}
-    return jwt.encode(raw_data, settings.jwt_access_secret_key, algorithm=settings.jwt_access_algorithm)
+    return jwt.encode(raw_data, settings.JWT_ACCESS_SECRET_KEY, algorithm=settings.JWT_ACCESS_ALGORITHM)
 
 
 def create_refresh_token(data):
-    expire = datetime.now(timezone.utc) + timedelta(hours=settings.jwt_refresh_token_expired)
+    expire = datetime.now(timezone.utc) + timedelta(hours=settings.JWT_REFRESH_TOKEN_EXPIRED)
     raw_data = {**data, "exp": expire}
-    return jwt.encode(raw_data, settings.jwt_refresh_secret_key, algorithm=settings.jwt_refresh_algorithm)
+    return jwt.encode(raw_data, settings.JWT_REFRESH_SECRET_KEY, algorithm=settings.JWT_REFRESH_ALGORITHM)
 
 
 def verify_refresh_token(session: Session, token: str):
     try:
         logger.info("payload")
         payload = jwt.decode(
-            token, settings.jwt_refresh_secret_key, algorithms=[settings.jwt_refresh_algorithm]
+            token, settings.jwt_refresh_secret_key, algorithms=[settings.JWT_REFRESH_ALGORITHM]
         )
         token_data = TokenPayload(**payload)
     except (JWTError, ValidationError) as e:

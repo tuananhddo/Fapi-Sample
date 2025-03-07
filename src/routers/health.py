@@ -4,9 +4,9 @@ from celery import chain
 from fastapi import APIRouter, Depends, Header
 from pydantic import BaseModel, ValidationError, field_validator, validator
 
-from src.core.settings import settings
+from ..core.settings import settings
 
-from src.exceptions.exceptions import CustomException
+from ..exceptions.exceptions import CustomException
 
 logger = logging.getLogger(__name__)
 
